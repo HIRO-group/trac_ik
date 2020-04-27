@@ -47,24 +47,24 @@ TRAC_IK::TRAC_IK(const std::string& base_link, const std::string& tip_link, cons
   solvetype(_type)
 {
 
-  ros::NodeHandle node_handle("~");
+  // ros::NodeHandle node_handle("~");
 
   urdf::Model robot_model;
-  std::string xml_string;
+  // std::string xml_string;
 
-  std::string urdf_xml, full_urdf_xml;
-  node_handle.param("urdf_xml", urdf_xml, URDF_param);
-  node_handle.searchParam(urdf_xml, full_urdf_xml);
+  // std::string urdf_xml, full_urdf_xml;
+  // node_handle.param("urdf_xml", urdf_xml, URDF_param);
+  // node_handle.searchParam(urdf_xml, full_urdf_xml);
 
-  ROS_DEBUG_NAMED("trac_ik", "Reading xml file from parameter server");
-  if (!node_handle.getParam(full_urdf_xml, xml_string))
-  {
-    ROS_FATAL_NAMED("trac_ik", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
-    return;
-  }
+  // ROS_DEBUG_NAMED("trac_ik", "Reading xml file from parameter server");
+  // if (!node_handle.getParam(full_urdf_xml, xml_string))
+  // {
+  //   ROS_FATAL_NAMED("trac_ik", "Could not load the xml from parameter server: %s", urdf_xml.c_str());
+  //   return;
+  // }
 
-  node_handle.param(full_urdf_xml, xml_string, std::string());
-  robot_model.initString(xml_string);
+  // node_handle.param(full_urdf_xml, xml_string, std::string());
+  robot_model.initString(URDF_param);
 
   ROS_DEBUG_STREAM_NAMED("trac_ik", "Reading joints and links from URDF");
 
