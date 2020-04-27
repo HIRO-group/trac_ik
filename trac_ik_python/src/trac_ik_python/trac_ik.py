@@ -4,7 +4,7 @@
 # Convenience code to wrap TRAC IK
 
 from trac_ik_python.trac_ik_wrap import TRAC_IK
-import rospy
+#import rospy
 
 
 class IK(object):
@@ -24,7 +24,8 @@ class IK(object):
             the param server at /robot_description.
         """
         if urdf_string is None:
-            urdf_string = rospy.get_param('/robot_description')
+            raise NotImplementedError("Can't load urdf_string")
+            #urdf_string = rospy.get_param('/robot_description')
         self._urdf_string = urdf_string
         self._timeout = timeout
         self._epsilon = epsilon

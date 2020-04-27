@@ -10,7 +10,6 @@
  #include <ros/ros.h>
  #include <kdl_parser/kdl_parser.hpp>
  #include <limits>
- #include <tf_conversions/tf_kdl.h>
  %}
 
  // We need this or we will get on runtime
@@ -167,16 +166,23 @@ namespace std {
     {
 
       KDL::Frame frame;
-      geometry_msgs::Pose pose;
-      pose.position.x = x;
-      pose.position.y = y;
-      pose.position.z = z;
-      pose.orientation.x = rx;
-      pose.orientation.y = ry;
-      pose.orientation.z = rz;
-      pose.orientation.w = rw;
+      // geometry_msgs::Pose pose;
+      // pose.position.x = x;
+      // pose.position.y = y;
+      // pose.position.z = z;
+      // pose.orientation.x = rx;
+      // pose.orientation.y = ry;
+      // pose.orientation.z = rz;
+      // pose.orientation.w = rw;
 
-      tf::poseMsgToKDL(pose, frame);
+      /* replace this tf::poseMsgToKDL(pose, frame); */
+      /* Why? it's a dependency hell... */
+      //void poseMsgToKDL(const geometry_msgs::Pose &m, KDL::Frame &k)
+      frame.p[0] = x;
+      frame.p[1] = y;
+      frame.p[2] = z;
+      
+      frame.M = KDL::Rotation::Quaternion(rx, ry, rz, rw);
 
       KDL::JntArray in(q_init.size()), out(q_init.size());
 
