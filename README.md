@@ -1,3 +1,69 @@
+# How does this branch/repository differ from the trac_ik one?
+
+* trac_ik_python cannot load a urdf from a ros parameter server (but does not depend on rospy)
+* trac_ik_python does not depend on tf_conversion
+* there's an installation instruction for python 3 (see below)
+
+# How to install trac_ik_python for Python3 (and with minimal ROS dependencies)?
+
+Given a fresh Ubuntu 18.04 minimal installation do the following steps.
+
+### (0) General requirements:
+###
+```
+sudo apt-get install git build-essential cmake python3-pip checkinstall
+```
+
+### (1) Install catkin (and catkin_tools):
+###    
+```
+sudo apt-get install python3-empy python3-nose libgtest-dev 
+pip3 install catkin_pkg
+
+git clone https://github.com/ros/catkin.git
+cd catkin
+mkdir build && cd build
+cmake -DPYTHON_VERSION=3 -DPYTHON_EXECUTABLE=/usr/bin/python3  -DCMAKE_INSTALL_PREFIX=/usr ..
+make
+sudo checkinstall --pkgname=catkin-github
+# Reply [y] and set description, e.g.: "catkin from github"
+
+pip3 install catkin_tools
+```
+
+### (2) Install trac_ik:
+###
+```
+sudo apt-get install ros-cmake-modules libkdl-parser-dev libeigen3-dev libnlopt-dev liborocos-kdl-dev liburdfdom-dev swig
+
+mkdir catkin_ws/src -p && cd catkin_ws/src
+git clone -b devel https://clemi@bitbucket.org/clemi/trac_ik.git
+cd ../..
+catkin init
+catkin config -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_VERSION=3 -DCMAKE_BUILD_TYPE=Release --merge-devel --blacklist trac_ik trac_ik_examples trac_ik_kinematics_plugin --extend /usr
+catkin build
+```
+
+### (3) Test installation:
+###
+```
+source devel/setup.bash
+
+# Get an example URDF file
+wget https://raw.githubusercontent.com/ros-planning/moveit_resources/master/panda_description/urdf/panda.urdf
+
+# Test inverse kinematics
+python3 -c "from trac_ik_python.trac_ik import IK; urdfstring = ''.join(open('panda.urdf', 'r').readlines()); ik = IK('panda_link0', 'panda_hand', urdf_string=urdfstring); print(ik.get_ik([0.0]*7, 0.5, 0.5, 0.5, 0, 0, 0, 1))"
+
+# The std output should be the following 7-tuple:
+# (0.14720490730995048, 0.8472134373227671, 0.8598701236671977, -1.4895870318659121, 2.4598493739297553, 1.1226250704200282, -0.35609815106501336)
+```
+
+
+# ============================================================================
+#   
+#   
+# trac_ik
 The ROS packages in this repository were created to provide an alternative
 Inverse Kinematics solver to the popular inverse Jacobian methods in KDL.
 Specifically, KDL's convergence algorithms are based on Newton's method, which
