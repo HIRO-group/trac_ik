@@ -43,7 +43,7 @@ sudo apt-get install ros-cmake-modules libkdl-parser-dev libeigen3-dev libnlopt-
 
 mkdir catkin_ws/src -p && cd catkin_ws/src
 git clone -b devel https://clemi@bitbucket.org/clemi/trac_ik.git
-cd ../..
+cd ..
 catkin init
 catkin config -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_VERSION=3 -DCMAKE_BUILD_TYPE=Release --merge-devel --blacklist trac_ik trac_ik_examples trac_ik_kinematics_plugin --extend /usr
 catkin build
