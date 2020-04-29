@@ -1,8 +1,11 @@
 # How does this branch/repository differ from the trac_ik one?
 
-* trac_ik_python cannot load a urdf from a ros parameter server (but does not depend on rospy)
-* trac_ik_python does not depend on tf_conversion
-* there's an installation instruction for python 3 (see below)
+* `trac_ik_lib` cannot load a URDF from the ROS parameter server (but in turn does not instantiate a node handle)
+* `trac_ik_python` cannot load a URDF from the ROS parameter server (but in turn does not depend on `rospy`)
+* `trac_ik_python` does not depend on `tf_conversions` (which would create an unresolvable dependency)
+* there's an installation instruction for Python 3 (see below)
+
+For a detailed diff summary look [here](https://bitbucket.org/clemi/trac_ik/branches/compare/devel..#diff).
 
 # How to install trac_ik_python for Python3 (and with minimal ROS dependencies)?
 
@@ -27,6 +30,8 @@ cmake -DPYTHON_VERSION=3 -DPYTHON_EXECUTABLE=/usr/bin/python3  -DCMAKE_INSTALL_P
 make
 sudo checkinstall --pkgname=catkin-github
 # Reply [y] and set description, e.g.: "catkin from github"
+# Answer the questions ("Do you want me to list them?") with [n]/yes/[n]/[y]
+# (it's the default answer in 3 out of the 4 questions)
 
 pip3 install catkin_tools
 ```
