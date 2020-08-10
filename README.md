@@ -1,3 +1,5 @@
+**Note: This is a fork of a [fork](https://bitbucket.org/clemi/trac_ik/src/devel/) of the [original](https://bitbucket.org/traclabs/trac_ik/src/master/) trac_ik repo.**
+
 # How does this branch/repository differ from the trac_ik one?
 
 * `trac_ik_lib` cannot load a URDF from the ROS parameter server (but in turn does not instantiate a node handle)
