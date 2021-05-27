@@ -29,6 +29,7 @@ pip3 install catkin_pkg
 
 git clone https://github.com/ros/catkin.git
 cd catkin
+git checkout <version>-devel # e.g. kinetic-devel for ubuntu 16.04, melodic-devel for 18.04, noetic-devel for 20.04
 mkdir build && cd build
 cmake -DPYTHON_VERSION=3 -DPYTHON_EXECUTABLE=/usr/bin/python3  -DCMAKE_INSTALL_PREFIX=/usr ..
 make
@@ -38,6 +39,13 @@ sudo checkinstall --pkgname=catkin-github
 # (it's the default answer in 3 out of the 4 questions)
 
 pip3 install catkin_tools
+# NOTE: if you use the above, you may run into a syntax error when running catkin init below because the version at the time of writing (0.6.x) relies on trollius
+# which is written in python2. Version 0.7 will fix this, but in the mean time, you can install from source using:
+# cd ~ # or wherever you want to store it
+# git clone https://github.com/catkin/catkin_tools.git
+# cd catkin_tools
+# pip3 install .
+# cd <directory where you cloned catkin>/catkin/build
 ```
 
 ### (2) Install trac_ik:
@@ -49,7 +57,10 @@ mkdir catkin_ws/src -p && cd catkin_ws/src
 git clone -b devel https://clemi@bitbucket.org/clemi/trac_ik.git
 cd ..
 catkin init
-catkin config -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_VERSION=3 -DCMAKE_BUILD_TYPE=Release --merge-devel --blacklist trac_ik trac_ik_examples trac_ik_kinematics_plugin --extend /usr
+catkin config -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_VERSION=3 -DCMAKE_BUILD_TYPE=Release --merge-devel --blacklist trac_ik trac_ik_examples
+# for conda environment replace /usr/bin/python3 with $(which python)
+# if you have a conventional ROS installation, you can ignore the '--extend  /usr' step
+trac_ik_kinematics_plugin --extend /usr
 catkin build
 ```
 
@@ -64,8 +75,10 @@ wget https://raw.githubusercontent.com/ros-planning/moveit_resources/master/pand
 # Test inverse kinematics
 python3 -c "from trac_ik_python.trac_ik import IK; urdfstring = ''.join(open('panda.urdf', 'r').readlines()); ik = IK('panda_link0', 'panda_hand', urdf_string=urdfstring); print(ik.get_ik([0.0]*7, 0.5, 0.5, 0.5, 0, 0, 0, 1))"
 
-# The std output should be the following 7-tuple:
+# The std output will most likely be one of the following 7-tuple:
+# [Panda has a redundant DoF so there can be multiple joint configs for a single Cartesian pose]
 # (0.14720490730995048, 0.8472134373227671, 0.8598701236671977, -1.4895870318659121, 2.4598493739297553, 1.1226250704200282, -0.35609815106501336)
+# (1.5642459790162786, 1.033826419580488, -1.137034628893683, -1.4641733616752757, -2.1826248503279584, 1.2612257933132356, 0.4657470590149234)
 ```
 
 
