@@ -75,7 +75,8 @@ wget https://raw.githubusercontent.com/ros-planning/moveit_resources/master/pand
 # Test inverse kinematics
 python3 -c "from trac_ik_python.trac_ik import IK; urdfstring = ''.join(open('panda.urdf', 'r').readlines()); ik = IK('panda_link0', 'panda_hand', urdf_string=urdfstring); print(ik.get_ik([0.0]*7, 0.5, 0.5, 0.5, 0, 0, 0, 1))"
 
-# The std output should be the following one of the following 7-tuple:
+# The std output will most likely be one of the following 7-tuple:
+# [Panda has a redundant DoF so there can be multiple joint configs for a single Cartesian pose]
 # (0.14720490730995048, 0.8472134373227671, 0.8598701236671977, -1.4895870318659121, 2.4598493739297553, 1.1226250704200282, -0.35609815106501336)
 # (1.5642459790162786, 1.033826419580488, -1.137034628893683, -1.4641733616752757, -2.1826248503279584, 1.2612257933132356, 0.4657470590149234)
 ```
